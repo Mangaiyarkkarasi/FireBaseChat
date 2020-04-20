@@ -12,6 +12,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_chat_log.*
+import kotlinx.android.synthetic.main.chat_date_item.view.*
 import kotlinx.android.synthetic.main.chat_from_row.view.*
 import kotlinx.android.synthetic.main.chat_to_row.view.*
 import java.text.SimpleDateFormat
@@ -22,8 +23,10 @@ class ChatLogActivity : AppCompatActivity() {
     companion object {
         val TAG="CHAT"
     }
+
     var toUser: User?=null
     val adapter = GroupAdapter<ViewHolder>()
+    var prevDate:String="PREVDATE"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +64,13 @@ class ChatLogActivity : AppCompatActivity() {
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                 val chatMsg= p0.getValue(ChatMessage::class.java)
                 Log.d(TAG,chatMsg?.textMsg)
+
                 if(chatMsg!=null){
+                    val cDate=getFormattedDate(chatMsg.timestamp)
+                    if(cDate!=null && prevDate!=cDate){
+                        adapter.add(ChatDateItem(cDate))
+                        prevDate = cDate
+                    }
                     if(chatMsg.fromId==FirebaseAuth.getInstance().uid){
                         adapter.add(ChatFromItem(chatMsg.textMsg,chatMsg.timestamp))
                     }
@@ -70,11 +79,10 @@ class ChatLogActivity : AppCompatActivity() {
                     }
                 }
             }
-
             override fun onChildRemoved(p0: DataSnapshot) {
             }
-
         })
+
     }
 
     class ChatMessage(val id:String, val textMsg: String, val fromId:String, val toId:String, val timestamp: Long  ){
@@ -108,17 +116,23 @@ class ChatLogActivity : AppCompatActivity() {
 
     }
 
-//    fun setUpData(){
-//        val adapter = GroupAdapter<ViewHolder>()
-//        adapter.add(ChatFromItem("This is froom msg"))
-//        adapter.add(ChatToItem("This is tooo msg"))
-////        adapter.add(ChatFromItem())
-////        adapter.add(ChatToItem())
-//
-//        recyclerview_chat_msg.adapter=adapter
-//
-//    }
 
+    fun getFormattedDate(timeStampInMills:Long ):String{
+        val currentDate=Calendar.getInstance()
+        currentDate.timeInMillis=timeStampInMills
+        val now=Calendar.getInstance()
+        val dateFormatInString="EEEE, MMMM d"
+        if(now.get(Calendar.DATE)==currentDate.get(Calendar.DATE)){
+            return "Today"
+        }
+        else if((now.get(Calendar.DATE)-currentDate.get(Calendar.DATE))==1){
+            return "Yesterday"
+        }
+        else{
+            val dateFormat=SimpleDateFormat(dateFormatInString,Locale.US)
+            return dateFormat.format(timeStampInMills)
+        }
+    }
 }
 
 
@@ -130,7 +144,7 @@ class ChatFromItem(val textFromMsg: String,val timestamp: Long): Item<ViewHolder
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.textview_from_msg.text=textFromMsg
         val date= Date(timestamp)
-        val format = SimpleDateFormat("HH:mm")
+        val format = SimpleDateFormat("HH:mm",Locale.US)
         viewHolder.itemView.textview_from_time.text=format.format(date)
     }
 }
@@ -143,9 +157,20 @@ class ChatToItem(val textToMsg: String,val timestampTo: Long): Item<ViewHolder>(
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         val date= Date(timestampTo)
-        val format = SimpleDateFormat("HH:mm")
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm",Locale.US)
         viewHolder.itemView.textview_to_msg.text=textToMsg
         viewHolder.itemView.textview_to_time.text=format.format(date)
     }
+}
 
+
+class ChatDateItem(val dateToShow:String):Item<ViewHolder>(){
+    override fun getLayout(): Int {
+        return R.layout.chat_date_item
+    }
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+        viewHolder.itemView.textview_chat_date.text=dateToShow
+
+    }
 }
