@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddPostActivity">
+
+    <!--<com.google.android.material.appbar.AppBarLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/app_bar_layout_profile_frag"-->
+        <!--android:background="@android:color/white"-->
+        <!--&gt;-->
+
+        <!--<androidx.appcompat.widget.Toolbar-->
+            <!--android:id="@+id/profile_toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_marginTop="4dp"-->
+            <!--android:layout_marginLeft="6dp"-->
+            <!--android:layout_marginRight="6dp"-->
+            <!--android:background="@android:color/white"-->
+            <!--&gt;-->
+
+            <!--<RelativeLayout android:layout_height="wrap_content"-->
+                <!--android:layout_width="wrap_content">-->
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/imgview_addpost_close"-->
+                    <!--android:layout_width="20dp"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:layout_alignParentStart="true"-->
+                    <!--android:src="@android:drawable/ic_menu_add"/>-->
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/imgview_addpost_save"-->
+                    <!--android:layout_width="30dp"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:layout_alignParentEnd="true"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--/>-->
+
+            <!--</RelativeLayout>-->
+
+        <!--</androidx.appcompat.widget.Toolbar>-->
+
+    <!--</com.google.android.material.appbar.AppBarLayout>-->
+
+    <RelativeLayout android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/layout_add_cancel">
+
+        <ImageView
+            android:id="@+id/imgview_addpost_close"
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"/>
+
+        <ImageView
+            android:id="@+id/imgview_addpost_save"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@android:drawable/ic_menu_upload"
+            />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="5dp"
+        android:layout_below="@+id/layout_add_cancel">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_margin="5dp"
+            android:scaleType="centerCrop"
+            android:id="@+id/img_add_post"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:id="@+id/edtxt_desc_add_post"
+            android:hint="Say something.."/>
+
+    </LinearLayout>
+
+</RelativeLayout>
